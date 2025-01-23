@@ -39,12 +39,12 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, showRawConte
                 key={index}
                 className="relative group aspect-video bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden"
               >
-                {!failedImages.has(image) ? (
+                {!failedImages.has(typeof image === 'string' ? image : image.src) ? (
                   <img
-                    src={image}
+                    src={typeof image === 'string' ? image : image.src}
                     alt="Search result"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={() => handleImageError(image)}
+                    onError={() => handleImageError(typeof image === 'string' ? image : image.src)}
                     loading="lazy"
                   />
                 ) : (
@@ -55,9 +55,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, showRawConte
                     </span>
                   </div>
                 )}
-                {!failedImages.has(image) && (
+                {!failedImages.has(typeof image === 'string' ? image : image.src) && (
                   <a
-                    href={image}
+                    href={typeof image === 'string' ? image : image.src}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="absolute inset-0 cursor-zoom-in"

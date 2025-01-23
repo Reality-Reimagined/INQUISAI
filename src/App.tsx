@@ -3,7 +3,7 @@ import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-quer
 import { Brain, Plus, Menu } from 'lucide-react';
 import { SearchBar } from './components/SearchBar';
 import { SearchResults } from './components/SearchResults';
-import { SearchHistory } from './components/SearchHistory';
+// import { SearchHistory } from './components/SearchHistory';
 import { SearchOptionsPanel } from './components/SearchOptions';
 import { searchApi } from './services/api';
 import { useSearchStore } from './store/searchStore';
@@ -14,6 +14,8 @@ import { cn } from './utils/cn';
 import { useAuth } from './hooks/useAuth';
 import { AuthModal } from './components/auth/AuthModal';
 import { UsageTracker } from './components/UsageTracker';
+import { ThemeToggle } from './components/ThemeToggle';
+// import { LandingPage } from './LandingPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -132,6 +134,7 @@ function SearchApp() {
                   >
                     <Plus className="w-5 h-5" />
                   </button>
+                  <ThemeToggle />
                   <SearchOptionsPanel options={searchOptions} onChange={setSearchOptions} />
                   {user ? (
                     <div className="flex items-center gap-3">
