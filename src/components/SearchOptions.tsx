@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Settings } from 'lucide-react';
+import React from 'react';
+import { Settings, X } from 'lucide-react';
 import { SearchOptions, defaultSearchOptions } from '../types/search';
 import { cn } from '../utils/cn';
-import { Switch } from '@headlessui/react';
 
 interface SearchOptionsPanelProps {
   options: SearchOptions;
@@ -10,35 +9,36 @@ interface SearchOptionsPanelProps {
 }
 
 export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "p-2 text-gray-500 hover:text-gray-700 rounded-lg",
-          "hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300"
+          "p-2 rounded-md text-gray-500 hover:text-gray-700",
+          "transition-colors duration-200",
+          isOpen && "text-blue-600"
         )}
       >
         <Settings className="w-5 h-5" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4">
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Search Options</h3>
+            <h3 className="font-semibold text-gray-900">Search Options</h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+              className="text-gray-500 hover:text-gray-700"
             >
-              <Settings className="w-5 h-5" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search Depth
               </label>
               <select
@@ -52,7 +52,7 @@ export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options,
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Topic
               </label>
               <select
@@ -66,7 +66,7 @@ export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options,
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Time Range
               </label>
               <select
@@ -83,7 +83,7 @@ export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options,
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Max Results
               </label>
               <input
@@ -104,21 +104,18 @@ export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options,
                   onChange={(e) => onChange({ ...options, include_images: e.target.checked })}
                   className="rounded border-gray-300"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Include Images</span>
+                <span className="text-sm text-gray-700">Include Images</span>
               </label>
 
-              <div className="flex items-center justify-between">
-                <label className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={options.include_raw_content}
                   onChange={(e) => onChange({ ...options, include_raw_content: e.target.checked })}
                   className="rounded border-gray-300"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Include raw content</span>
-                </label>
-               
-              </div>
+                <span className="text-sm text-gray-700">Include Raw Content</span>
+              </label>
 
               <label className="flex items-center gap-2">
                 <input
@@ -127,13 +124,13 @@ export const SearchOptionsPanel: React.FC<SearchOptionsPanelProps> = ({ options,
                   onChange={(e) => onChange({ ...options, include_answer: e.target.checked })}
                   className="rounded border-gray-300"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Include AI Answer</span>
+                <span className="text-sm text-gray-700">Include AI Answer</span>
               </label>
             </div>
 
             <button
               onClick={() => onChange(defaultSearchOptions)}
-              className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors"
+              className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700 transition-colors"
             >
               Reset to Defaults
             </button>

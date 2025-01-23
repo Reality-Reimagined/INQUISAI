@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Zap, Clock, Shield, CreditCard, ArrowRight } from 'lucide-react';
-import { cn } from './utils/cn';
+import { cn } from '../utils/cn';
 
 interface Feature {
   icon: React.ReactNode;

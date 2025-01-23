@@ -3,7 +3,7 @@ import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-quer
 import { Brain, Plus, Menu } from 'lucide-react';
 import { SearchBar } from './components/SearchBar';
 import { SearchResults } from './components/SearchResults';
-// import { SearchHistory } from './components/SearchHistory';
+import { SearchHistory } from './components/SearchHistory';
 import { SearchOptionsPanel } from './components/SearchOptions';
 import { searchApi } from './services/api';
 import { useSearchStore } from './store/searchStore';
@@ -15,7 +15,6 @@ import { useAuth } from './hooks/useAuth';
 import { AuthModal } from './components/auth/AuthModal';
 import { UsageTracker } from './components/UsageTracker';
 import { ThemeToggle } from './components/ThemeToggle';
-// import { LandingPage } from './LandingPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,7 +90,7 @@ function SearchApp() {
   // ];
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex">
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -109,75 +108,80 @@ function SearchApp() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        <header className="bg-white border-b border-gray-100 sticky top-0 z-10">
+        <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="p-2 text-gray-500 hover:text-gray-700 lg:hidden"
+                className="p-2 text-gray-500 hover:text-gray-700 lg:hidden dark:text-gray-400 dark:hover:text-gray-300"
               >
                 <Menu className="w-5 h-5" />
               </button>
-              <div className="flex-1 lg:flex lg:items-center lg:justify-end">
-                <div className="flex items-center gap-4 justify-end">
-                  {user && (
+
+              <div className="flex-1 flex items-center justify-end gap-4">
+                <button
+                  onClick={startNewConversation}
+                  className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800"
+                  title="New Thread"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+
+                <SearchOptionsPanel options={searchOptions} onChange={setSearchOptions} />
+                <ThemeToggle />
+                {user ? (
+                  <>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {user.email}
+                    </span>
+                    
+                    {user.subscription_tier === 'free' && (
+                      <button 
+                        className="px-4 py-1.5 text-sm font-medium text-white bg-[#0A85D1] rounded-full hover:bg-[#0972B5] transition-colors"
+                        onClick={() => {/* handle upgrade */}}
+                      >
+                        Upgrade to Pro
+                      </button>
+                    )}
+
                     <UsageTracker 
                       searchesUsed={user.searches_used}
                       searchLimit={user.search_limit}
-                      className="hidden lg:block"
+                      className="hidden lg:flex"
                     />
-                  )}
-                  <button
-                    onClick={startNewConversation}
-                    className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100"
-                    title="New Thread"
-                  >
-                    <Plus className="w-5 h-5" />
-                  </button>
-                  <ThemeToggle />
-                  <SearchOptionsPanel options={searchOptions} onChange={setSearchOptions} />
-                  {user ? (
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600">{user.email}</span>
-                      <button 
-                        onClick={signOut}
-                        className="text-sm text-gray-600 hover:text-gray-800"
-                      >
-                        Sign Out
-                      </button>
-                      {user.subscription_tier === 'free' && (
-                        <button 
-                          className="px-4 py-1.5 text-sm font-medium text-white bg-[#0A85D1] rounded-full hover:bg-[#0972B5] transition-colors"
-                          onClick={() => {/* handle upgrade */}}
-                        >
-                          Upgrade to Pro
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setIsAuthModalOpen(true)}
-                      className="px-4 py-1.5 text-sm font-medium text-white bg-[#0A85D1] rounded-full hover:bg-[#0972B5] transition-colors"
+
+                    <button 
+                      onClick={signOut}
+                      className="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
                     >
-                      Sign In
+                      Sign Out
                     </button>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setIsAuthModalOpen(true)}
+                    className="px-4 py-1.5 text-sm font-medium text-white bg-[#0A85D1] rounded-full hover:bg-[#0972B5] transition-colors"
+                  >
+                    Sign In
+                  </button>
+                )}
+
+                
               </div>
             </div>
           </div>
         </header>
 
-        <div className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col">
           <div className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8">
             {!currentConversation?.length ? (
               // Empty state
               <div className="py-8 space-y-8">
                 <div className="text-center space-y-4">
-                  <h2 className="text-4xl font-bold text-gray-900">
+                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
                     What do you want to know?
                   </h2>
-                  <p className="text-lg text-gray-600">
+                  <p className="text-lg text-gray-600 dark:text-gray-400">
                     Ask anything and get comprehensive answers powered by AI
                   </p>
                 </div>
@@ -227,7 +231,7 @@ function SearchApp() {
           </div>
 
           {currentConversation?.length > 0 && (
-            <div className="sticky bottom-0 bg-white border-t border-gray-100">
+            <div className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
               <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4">
                 <SearchBar 
                   onSearch={handleSearch} 
@@ -237,7 +241,7 @@ function SearchApp() {
               </div>
             </div>
           )}
-        </div>
+        </main>
 
         {error && (
           <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-xl mx-auto px-4">
